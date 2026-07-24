@@ -1,0 +1,1 @@
+(seg[ind] >= val) ? lo : -1;
