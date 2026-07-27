@@ -4,8 +4,18 @@ using namespace std;
 using ll = long long;
 
 ll INF = 1e18;
-void warshalls(int n, vector<vector<ll>>& dist){
+void solve(){
+    int n, m, q;
+    cin >> n >> m >> q;
+
+    vector<vector<ll>> dist(n+1, vector<ll>(n+1, INF));
     for(int i=1; i<=n; i++) dist[i][i] = 0;
+    for(int i=0; i<m; i++){
+        int u, v, wt;
+        cin >> u >> v >> wt;
+        dist[u][v] = (ll)min(dist[u][v], (ll)wt);
+        dist[v][u] = (ll)min(dist[v][u], (ll)wt);
+    }
 
     for(int via=1; via<=n; via++){
         for(int u=1; u<=n; u++){
@@ -17,37 +27,19 @@ void warshalls(int n, vector<vector<ll>>& dist){
             }
         }
     }
-}
-
-void solve(){
-    int n, m, q;
-    cin >> n >> m >> q;
-
-    vector<vector<ll>> dist(n+1, vector<ll>(n+1, INF));
-    for(int i=0; i<m; i++){
-        int u, v, wt;
-        cin >> u >> v >> wt;
-        dist[u][v] = min<ll>(dist[u][v], wt);
-        dist[v][u] = min<ll>(dist[v][u], wt);
-    }
-
-    warshalls(n, dist);
-
-    for(int i=0; i<q; i++){
+    for(int i=1; i<=q; i++){
         int u, v;
         cin >> u >> v;
-        if(dist[u][v] == INF) cout << -1 << endl;
-        else cout << dist[u][v] << endl;
+        cout << (dist[u][v] == INF ? -1 : dist[u][v]) << "\n";
     }
-    cout << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    // freopen("io/input.txt", "r", stdin);
+    // freopen("io/output.txt", "w", stdout);
 
     solve();
     return 0;

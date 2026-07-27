@@ -2,8 +2,6 @@
 using namespace std;
 
 using ll = long long;
-
-ll INF = 1e18;
 void solve(){
     int n, m;
     cin >> n >> m;
@@ -13,29 +11,32 @@ void solve(){
         int u, v, wt;
         cin >> u >> v >> wt;
         adj[u].push_back({v, wt});
+        adj[v].push_back({u, wt});
     }
 
-
-    vector<ll> dist(n+1, INF);
+    vector<ll> vis(n+1, 0);
     priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
-    dist[1] = 0LL;
     pq.push({0LL, 1});
+    ll totalCost = 0;
     while(!pq.empty()){
         auto [cost, node] = pq.top(); pq.pop();
-
-        if(dist[node] < cost) continue;
+        if(vis[node]) continue;
+        vis[node] = 1;
+        totalCost += cost;
         for(auto [nei, wt]: adj[node]){
-            if(dist[nei] > wt + cost){
-                dist[nei] = wt + cost;
-                pq.push({dist[nei], nei});
-            }
+            if(vis[nei]) continue;
+            pq.push({wt, nei});
         }
     }
-    for(int i=1; i<=n; i++){
-        cout << dist[i] << " ";
-    }
-}
 
+    for(int i=1; i<=n; i++){
+        if(vis[i] == 0){
+            cout << "IMPOSSIBLE" << "\n";
+            return;
+        }
+    }
+    cout << totalCost << "\n";
+}
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
